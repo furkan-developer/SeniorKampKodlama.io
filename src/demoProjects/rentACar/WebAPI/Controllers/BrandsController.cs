@@ -9,20 +9,27 @@ namespace WebAPI.Controllers
 {
     public class BrandsController : BaseController
     {
-        [HttpPost]
+        [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] CreateBrandCommand createSomeFeatureEntityCommand)
         {
             CreatedBrandDto result = await Mediator.Send(createSomeFeatureEntityCommand);
             return Created("", result);
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll([FromQuery] PageRequest pageRequest)
         {
             GetListBrandQuery getListBrandQuery = new() { PageRequest = pageRequest };
             BrandListModel result = await Mediator.Send(getListBrandQuery);
             
             return Ok(result);
+        }
+
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetById([FromRoute] GetByIdBrandQuery getByIdBrandQuery)
+        {
+            BrandGetByIdDto brandGetByIdDto = await Mediator.Send(getByIdBrandQuery);
+            return Ok(brandGetByIdDto);
         }
     }
 
